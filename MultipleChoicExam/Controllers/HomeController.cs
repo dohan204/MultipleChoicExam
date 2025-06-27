@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MultipleChoicExam.Models;
 
@@ -45,9 +45,36 @@ namespace MultipleChoicExam.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult ChangePassoword(UserAccount user) 
+        public IActionResult ChangePassword(ChangePassword change)
         {
-            return View(user);
+            if (!ModelState.IsValid)
+            {
+                return View(change);
+            }
+
+            // Lấy user đang đăng nhập
+            using (var context = new EFCoreDbContext())
+            {
+                var user = context.UserAccount.FirstOrDefault(u => u.UserName == change.UserName);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Không tìm thấy người dùng.");
+                    return View(change);
+                }
+
+                if (user.Password != change.CurrentPassword)
+                {
+                    ModelState.AddModelError("", "Mật khẩu hiện tại không đúng.");
+                    return View(change);
+                }
+
+                // Cập nhật mật khẩu mới
+                user.Password = change.NewPassword;
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("Main", "Home");
         }
+
     }
 }

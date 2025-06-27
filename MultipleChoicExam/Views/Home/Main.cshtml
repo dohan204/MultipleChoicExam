@@ -6,11 +6,11 @@
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hệ thống</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
-                        <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
+                        <li>@Html.ActionLink("Đổi mật khẩu","ChangePassword", "Home", new {@class = "dropdown-item"})
                         <li><a class="dropdown-item" href="#">Sao lưu dữ liệu</a></li>
                         <li><a class="dropdown-item" href="#">Phục hồi dữ liệu</a></li>
                         <li><a class="dropdown-item" href="#">Quản lý người dùng</a></li>
-                        <li>@Html.ActionLink("Đăng xuất","Login","Home", new {@class = "btn btn-success"})</li>
+                        <li>@Html.ActionLink("Đăng xuất", "Login", "Home", new { @class = "dropdown-item" })</li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -41,7 +41,7 @@
                 </li>
                 
             </ul>
-            <form class="d-flex">
+            <form class="d-flex flex-md-row-reverse">
                 <input class="form-control me-2" type="text" placeholder="Search">
                 <button class="btn btn-primary" type="button">Search</button>
             </form>
