@@ -1,0 +1,50 @@
+﻿<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hệ thống</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
+                        <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
+                        <li><a class="dropdown-item" href="#">Sao lưu dữ liệu</a></li>
+                        <li><a class="dropdown-item" href="#">Phục hồi dữ liệu</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lý người dùng</a></li>
+                        <li>@Html.ActionLink("Đăng xuất","Login","Home", new {@class = "btn btn-success"})</li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Danh mục</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Quản lý môn thi</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lý đề thi</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lý câu hỏi</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Chức năng</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Làm bài thi</a></li>
+                        <li><a class="dropdown-item" href="#">Chọn đề thi</a></li>
+                        <li><a class="dropdown-item" href="#">Chọn môn thi</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thống kê - báo cáo</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Báo cáo điểm theo môn thi</a></li>
+                        <li><a class="dropdown-item" href="#">Báo cáo điểm theo thời gian</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Trợ giúp</a>
+                </li>
+                
+            </ul>
+            <form class="d-flex">
+                <input class="form-control me-2" type="text" placeholder="Search">
+                <button class="btn btn-primary" type="button">Search</button>
+            </form>
+        </div>
+    </div>
+</nav>
