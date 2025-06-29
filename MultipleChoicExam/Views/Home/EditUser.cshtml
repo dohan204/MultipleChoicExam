@@ -1,0 +1,50 @@
+﻿@model MultipleChoicExam.Models.UserAccount
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <form class="" asp-action="EditUser" method="post">
+                @* hoặc dùng @Html.HiddenFor(mbox=>mbox.UserId, new {}) *@
+                <input type="hidden" asp-for="UserId" />
+               <div class="row">
+                   <div class="col-sm-6 mb-3">
+                       <label asp-for="UserName">UserName:</label>
+                       <input asp-for="UserName" class="form-control"/>
+                   </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Password">Password:</label>
+                        <input asp-for="Password" class="form-control" />
+                    </div>
+               </div>
+               <div class="row">
+                   <div class="col-sm-4 mb-3">
+                       <label asp-for="RoleId">RoleId: </label>
+                       <input asp-for="RoleId" class="form-control" />
+                   </div>
+                    <div class="col-sm-4 mb-3">
+                        <label asp-for="Birthday">Ngày sinh : </label>
+                        <input asp-for="Birthday" type="date" class="form-control" />
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <label asp-for="PhoneNumber">Điện thoại: </label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                    </div>
+               </div>
+                <div class="row">
+                    <div class="col-sm-4 mb-3">
+                        <label asp-for="FullName">HỌ và tên: </label>
+                        <input asp-for="FullName" class="form-control" />
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <label asp-for="Email">Email: </label>
+                        <input asp-for="Email" type="email" class="form-control" />
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <label asp-for="Address">Address: </label>
+                        <input asp-for="Address" class="form-control" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Send</button>
+            </form>
+        </div>
+    </div>
+</div>

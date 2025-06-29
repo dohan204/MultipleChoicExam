@@ -1,0 +1,11 @@
+﻿@model MultipleChoicExam.Models.UserAccount
+<h3>Bạn có muốn xóa người dùng này không</h3>
+<p>
+    @Model.FullName
+</p>
+
+<form asp-action="DeleteUser" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <button type="submit" class="btn btn-danger">Xác nhận Xóa</button>
+    <a asp-action="ManageUser" class="btn btn-secondary">Hủy</a>
+</form>
