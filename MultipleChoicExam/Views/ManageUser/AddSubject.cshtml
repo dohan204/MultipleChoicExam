@@ -1,0 +1,28 @@
+﻿@model MultipleChoicExam.Models.Subject01
+
+<div class="container mt-5">
+    <h3>thêm môn thi</h3>
+    <div class="container fluid">
+        <div class="card">
+            <div class="card-body">
+                <form asp-controller="ManageUser" asp-action="AddSubject" method="post">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label asp-for="SubjectId" class="form-label">Mã môn: </label>
+                            <input asp-for="SubjectId" class="form-control" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label asp-for="SubjectName" class="form-label">Tên môn: </label>
+                            <input asp-for="SubjectName" class="form-control" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label asp-for="Description" class="form-label">Mô tả: </label>
+                            <input asp-for="Description" class="form-control" />
+                        </div>
+                    </div>
+                    <button class="btn btn-success" type="submit">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

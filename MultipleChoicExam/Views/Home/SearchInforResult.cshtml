@@ -1,0 +1,12 @@
+﻿@model MultipleChoicExam.Models.UserAccount
+
+@if (Model != null)
+{
+    <h2>Kết quả tìm kiếm</h2>
+    <p>Username: @Model.UserName</p>
+    <p>Email: @Model.Email</p>
+}
+else
+{
+    <p>Không tìm thấy kết quả.</p>
+}

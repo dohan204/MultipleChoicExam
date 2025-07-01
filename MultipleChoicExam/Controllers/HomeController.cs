@@ -167,6 +167,25 @@ namespace MultipleChoicExam.Controllers
             // xóa xong thì trả về view đang hiện thị danh sách
             return RedirectToAction("ManageUser");
         }
+        [HttpPost]
+        public IActionResult SearchInforResult(newUser model)
+        {
+            Console.WriteLine(">>> UserName nhận được: " + model.User.UserName);
+
+            if (string.IsNullOrEmpty(model.User.UserName))
+            {
+                return BadRequest("Thiếu UserName");
+            }
+            var foundUser = _dbContext.UserAccount
+                .FirstOrDefault(u => u.UserName == model.User.UserName);
+            if(foundUser == null)
+            {
+                return NotFound();
+            }
+            return View(foundUser);
+        }
+
+
 
     }
 }

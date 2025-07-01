@@ -9,9 +9,9 @@
 <div class="d-flex align-items-center mb-3 mt-2">
     <a asp-controller="Home" asp-action="AddUser" class="btn btn-primary">Thêm </a>
     <!-- Search ở cuối -->
-    <form class="d-flex ms-auto">
+    <form class="d-flex ms-auto" asp-controller="Home" asp-action="SearchInforResult" method="post">
         <button class="btn btn-primary me-2">Search</button>
-        <input type="text" class="form-control" placeholder="Search">
+        <input type="text" asp-for="User.UserName" class="form-control" placeholder="Search">
     </form>
 </div>
 <div class="card mt-5">

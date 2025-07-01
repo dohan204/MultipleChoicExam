@@ -6,5 +6,6 @@ namespace MultipleChoicExam.Models
     {
         public EFCoreDbContext(DbContextOptions<EFCoreDbContext> options) : base(options) { }
         public DbSet<UserAccount> UserAccount { get; set; }
+        public DbSet<Subject01> Subject01 { get; set; }
     }
 }
