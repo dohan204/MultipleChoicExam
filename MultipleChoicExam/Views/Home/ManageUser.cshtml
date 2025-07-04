@@ -1,0 +1,53 @@
+﻿@model newUser
+
+
+<div class="container mt-3">
+    <h2 class="text-center">
+        Quản lý người dùng
+    </h2>
+</div>
+<div class="d-flex align-items-center mb-3 mt-2">
+    <a asp-controller="Home" asp-action="AddUser" class="btn btn-primary">Thêm </a>
+    <!-- Search ở cuối -->
+    <form class="d-flex ms-auto" asp-controller="Home" asp-action="SearchInforResult" method="post">
+        <button class="btn btn-primary me-2">Search</button>
+        <input type="text" asp-for="User.UserName" class="form-control" placeholder="Search">
+    </form>
+</div>
+<div class="card mt-5">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Mã</th>
+                    <th>Tài khoản</th>
+                    <th>Mật khẩu</th>
+                    <th>Vai trò</th>
+                    <th>Số điện</th>
+                    <th>Địa chỉ </th>
+                    <th>Ngày sinh</th>
+                    <th>Họ và tên</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model.userList)
+                {
+                    <tr>
+                        <td class="mt-0"><a asp-action="EditUser" asp-route-id="@item.UserId" class="btn btn-success">Sửa</a>
+                            <a asp-action="DeleteUser" asp-route-id="@item.UserId" class="btn btn-primary">Xóa</a>
+                            </td>
+                        <td>@item.UserName</td>
+                        <td>@item.Password</td>
+                        <td>@item.RoleId</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.Address</td>
+                        <td>@(item.Birthday?.ToString("dd/MM/yyy") ?? " ")</td>
+                        <td>@item.FullName</td>
+                        <td>@item.Email</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

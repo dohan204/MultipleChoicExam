@@ -1,0 +1,12 @@
+﻿@model MultipleChoicExam.Models.Subject01
+@{
+    ViewData["Title"] = "DeleteSubject";
+}
+
+<h1>Bạn có chắc là xóa môn thi này không</h1>
+<form asp-controller="ManageUser" asp-action="DeleteSubject" method="post">
+    <input type="hidden" asp-for="SubjectId" />
+    <button type="submit" class="btn btn-danger">Xác nhận Xóa</button>
+    <a asp-action="ManageSubject" class="btn btn-secondary">Hủy</a>
+</form>
+

@@ -1,0 +1,56 @@
+﻿
+@model MultipleChoicExam.Models.Question
+
+<div class="container mt-5">
+    <h3>Thêm mới câu hỏi</h3>
+    <div class="card shadow mt-0">
+        <div class="card-body">
+            <form asp-controller="Question" asp-action="EditQuestion" method="post">
+                <!-- Dòng 1 -->
+                @Html.HiddenFor(mbox=>mbox.QuestionId)
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="QContent" class="form-label">Nội dung: </label>
+                        <input asp-for="QContent" type="text" class="form-control"  />
+                    </div>
+                </div>
+
+                <!-- Dòng 2 -->
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="SubjectId">Tên môn thi</label>
+                        @Html.DropDownListFor(m => m.SubjectId,
+                                 (IEnumerable<SelectListItem>)ViewBag.SubjectList,
+                                 "Chọn môn",
+                                 new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="OptionA" class="form-label">Lựa chọn A: </label>
+                        <input asp-for="OptionA" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="OptionC">Lựa chọn C: </label>
+                        <input asp-for="OptionC" type="text" class="form-control" />
+                    </div>
+                </div>
+
+                <!-- Dòng 3 -->
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Answer" class="form-label">Đáp án</label>
+                        <input asp-for="Answer" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="OptionB" class="form-label">Lựa chọn B: </label>
+                        <input asp-for="OptionB" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="OptionD" class="form-label">Lựa chọn D: </label>
+                        <input asp-for="OptionD" type="text" class="form-control" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Sửa</button>
+            </form>
+        </div>
+    </div>
+</div>
