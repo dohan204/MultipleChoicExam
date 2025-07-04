@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Question>
+
+<div class="container mt-5">
+    <h3 class="text-center">Danh sách câu hỏi</h3>
+    <a asp-action="AddQuestion" asp-controller="Question" class="btn btn-info">Thêm</a>
+    @* <a asp-action="EditQuestion" asp-controller="Question" class="btn btn-success">Sửa</a> *@
+    <div class="card">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Môn thi</th>
+                    <th>
+                        Mã
+                    </th>
+                    <th>Nội dung</th>
+                    <th>Đáp án A</th>
+                    <th>Đáp án B</th>
+                    <th>Đáp án C</th>
+                    <th>Đáp án D</th>
+                    <th>Đáp án đúng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var i in Model)
+                {
+                    <tr>
+                        <td>@i.SubjectId</td>
+                        <td><a asp-controller="Question" asp-action="EditQuestion" asp-route-id="@i.QuestionId" class="btn btn-info">Sửa</a>
+                            <a href="@Url.Action("DeleteQuestion", "Question", new { id = i.QuestionId })"
+                               class="btn btn-danger"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa câu hỏi này không?');">
+                                Xóa
+                            </a>
+
+                            @i.QuestionId</td>
+                        <td>@i.QContent</td>
+                        <td>@i.OptionA</td>
+                        <td>@i.OptionB</td>
+                        <td>@i.OptionC</td>
+                        <td>@i.OptionD</td>
+                        <td>@i.Answer</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

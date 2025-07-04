@@ -34,7 +34,7 @@
                 @foreach(var item in Model.userList)
                 {
                     <tr>
-                        <td class="m-1"><a asp-action="EditUser" asp-route-id="@item.UserId" class="btn btn-success">Sửa</a>
+                        <td class="mt-0"><a asp-action="EditUser" asp-route-id="@item.UserId" class="btn btn-success">Sửa</a>
                             <a asp-action="DeleteUser" asp-route-id="@item.UserId" class="btn btn-primary">Xóa</a>
                             </td>
                         <td>@item.UserName</td>
