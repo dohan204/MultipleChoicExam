@@ -1,72 +1,77 @@
-﻿<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    @* <a style="margin-left: 5px" class="navbar-brand"> *@
-                    @*     <img src="~/Images/meoHieu.jpg" width="50" height="50" /> *@
-                    @* </a> *@
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hệ thống</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
-                        <li>@Html.ActionLink("Đổi mật khẩu","ChangePassword", "Home",null, new {@class = "dropdown-item"})
-                        <li><a class="dropdown-item" href="#">Sao lưu dữ liệu</a></li>
-                        <li><a class="dropdown-item" href="#">Phục hồi dữ liệu</a></li>
-                        <li><a asp-controller="Home" asp-action="ManageUser" class="dropdown-item">Quản lý người dùng
-                        </a></li>
-                        <li>@Html.ActionLink("Đăng xuất", "Login", "Home",null ,new { @class = "dropdown-item" })</li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Danh mục</a>
-                    <ul class="dropdown-menu">
-                        <li><a asp-controller="ManageUser" asp-action="ManageSubject" class="dropdown-item">Quản lý môn thi</a></li>
-                        <li><a class="dropdown-item" href="#">Quản lý đề thi</a></li>
-                        <li><a asp-controller="Question" asp-action="ShowDataQuestion" class="dropdown-item">Quản lý câu hỏi</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Chức năng</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Làm bài thi</a></li>
-                        <li><a class="dropdown-item" href="#">Chọn đề thi</a></li>
-                        <li><a class="dropdown-item" href="#">Chọn môn thi</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thống kê - báo cáo</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Báo cáo điểm theo môn thi</a></li>
-                        <li><a class="dropdown-item" href="#">Báo cáo điểm theo thời gian</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Trợ giúp</a>
-                </li>
-                
-            </ul>
-            <form class="d-flex flex-md-row-reverse">
-                <input class="form-control me-2" type="text" placeholder="Search">
-                <button class="btn btn-primary" type="button">Search</button>
-            </form>
+﻿<div class="container-md">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        @* <a style="margin-left: 5px" class="navbar-brand"> *@
+                        @*     <img src="~/Images/meoHieu.jpg" width="50" height="50" /> *@
+                        @* </a> *@
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hệ thống</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
+                            <li>@Html.ActionLink("Đổi mật khẩu", "ChangePassword", "Home", null, new { @class = "dropdown-item" })
+                            <li><a class="dropdown-item" href="#">Sao lưu dữ liệu</a></li>
+                            <li><a class="dropdown-item" href="#">Phục hồi dữ liệu</a></li>
+                            <li>
+                                <a asp-controller="Home" asp-action="ManageUser" class="dropdown-item">
+                                    Quản lý người dùng
+                                </a>
+                            </li>
+                            <li>@Html.ActionLink("Đăng xuất", "Login", "Home", null, new { @class = "dropdown-item" })</li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Danh mục</a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="ManageUser" asp-action="ManageSubject" class="dropdown-item">Quản lý môn thi</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lý đề thi</a></li>
+                            <li><a asp-controller="Question" asp-action="ShowDataQuestion" class="dropdown-item">Quản lý câu hỏi</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Chức năng</a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Home" asp-action="Test" class="dropdown-item">Làm bài thi</a></li>
+                            <li><a class="dropdown-item" href="#">Chọn đề thi</a></li>
+                            <li><a class="dropdown-item" href="#">Chọn môn thi</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thống kê - báo cáo</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Báo cáo điểm theo môn thi</a></li>
+                            <li><a class="dropdown-item" href="#">Báo cáo điểm theo thời gian</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Trợ giúp</a>
+                    </li>
+
+                </ul>
+                <form class="d-flex flex-md-row-reverse">
+                    <input class="form-control me-2" type="text" placeholder="Search">
+                    <button class="btn btn-primary" type="button">Search</button>
+                </form>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</div>
 <div class="container mt-5">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-md-4">
             <img src="~/Images//meoHieu.jpg" asp-append-version=true />
             <h2>meomeo</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
             <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
         </div>
-        <div class="col-sm-4">
+        <div class="col-md-4">
             <img src="~/Images//meoHieu.jpg" asp-append-version=true />
             <h2>meomeo</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
             <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
         </div>
-        <div class="col-sm-4">
+        <div class="col-md-4">
             <img src="~/Images//meoHieu.jpg" asp-append-version=true />
             <h2>meomeo</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>

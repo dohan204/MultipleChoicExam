@@ -28,15 +28,16 @@
                     <th>Ngày sinh</th>
                     <th>Họ và tên</th>
                     <th>Email</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach(var item in Model.userList)
                 {
                     <tr>
-                        <td class="mt-0"><a asp-action="EditUser" asp-route-id="@item.UserId" class="btn btn-success">Sửa</a>
-                            <a asp-action="DeleteUser" asp-route-id="@item.UserId" class="btn btn-primary">Xóa</a>
-                            </td>
+                        <td>
+                            @item.UserId
+                        </td>
                         <td>@item.UserName</td>
                         <td>@item.Password</td>
                         <td>@item.RoleId</td>
@@ -45,6 +46,10 @@
                         <td>@(item.Birthday?.ToString("dd/MM/yyy") ?? " ")</td>
                         <td>@item.FullName</td>
                         <td>@item.Email</td>
+                        <td>
+                            <a asp-action="EditUser" asp-route-id="@item.UserId" class="btn btn-success">Sửa</a>
+                            <a asp-action="DeleteUser" asp-route-id="@item.UserId" class="btn btn-primary">Xóa</a>
+                        </td>
                     </tr>
                 }
             </tbody>

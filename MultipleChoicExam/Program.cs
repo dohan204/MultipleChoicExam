@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<EFCoreDbContext>(options =>
     options.UseSqlServer(@"Server=FC-HAN\SQLEXPRESS;Database=TestProjectDB;Trusted_Connection=True;TrustServerCertificate=True;"));
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

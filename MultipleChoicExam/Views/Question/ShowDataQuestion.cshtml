@@ -10,7 +10,7 @@
                 <tr>
                     <th>Môn thi</th>
                     <th>
-                        Mã
+                        Mã câu
                     </th>
                     <th>Nội dung</th>
                     <th>Đáp án A</th>
@@ -18,6 +18,7 @@
                     <th>Đáp án C</th>
                     <th>Đáp án D</th>
                     <th>Đáp án đúng</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,23 +26,26 @@
                 {
                     <tr>
                         <td>@i.SubjectId</td>
-                        <td><a asp-controller="Question" asp-action="EditQuestion" asp-route-id="@i.QuestionId" class="btn btn-info">Sửa</a>
-                            <a href="@Url.Action("DeleteQuestion", "Question", new { id = i.QuestionId })"
-                               class="btn btn-danger"
-                               onclick="return confirm('Bạn có chắc chắn muốn xóa câu hỏi này không?');">
-                                Xóa
-                            </a>
-
-                            @i.QuestionId</td>
+                        <td> @i.QuestionId</td>
                         <td>@i.QContent</td>
                         <td>@i.OptionA</td>
                         <td>@i.OptionB</td>
                         <td>@i.OptionC</td>
                         <td>@i.OptionD</td>
                         <td>@i.Answer</td>
+                        <td>
+                            <a asp-controller="Question" asp-action="EditQuestion" asp-route-id="@i.QuestionId" class="btn btn-info">Sửa</a>
+                            <a href="@Url.Action("DeleteQuestion", "Question", new { id = i.QuestionId })"
+                               class="btn btn-danger"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa câu hỏi này không?');">
+                                Xóa
+                            </a>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
+
     </div>
+    <a asp-action="Main" asp-controller="Home" class="btn btn-info">Trở về</a>
 </div>
