@@ -24,6 +24,7 @@
                     <th>Mã Môn</th>
                     <th>Tên Môn</th>
                     <th>Mô tả</th>
+                    <th>Hành đ</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,11 +34,13 @@
                         <td>
                            @i
                         </td>
-                        <td><a asp-controller="ManageUser" asp-action="EditSubject" asp-route-subId="@item.SubjectId" class="btn btn-success">Sửa</a>
-                            <a asp-controller="ManageUser" asp-action="DeleteSubject" asp-route-subId="@item.SubjectId" class="btn btn-success">Xóa</a>
-                            @item.SubjectId </td>
+                        <td>@item.SubjectId </td>
                         <td>@item.SubjectName</td>
                         <td>@item.Description</td>
+                        <td>
+                            <a asp-controller="ManageUser" asp-action="EditSubject" asp-route-subId="@item.SubjectId" class="btn btn-success">Sửa</a>
+                            <a asp-controller="ManageUser" asp-action="DeleteSubject" asp-route-subId="@item.SubjectId" class="btn btn-success">Xóa</a>
+                        </td>
                     </tr>
                     i++;
                 }

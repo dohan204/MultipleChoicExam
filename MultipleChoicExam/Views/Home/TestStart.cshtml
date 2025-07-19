@@ -1,0 +1,111 @@
+﻿@model MultipleChoicExam.Models.HomeTest
+
+<div class="container mt-4" onchange="this.form.submit">
+
+    <div class="row">
+        <div class="col-md-4 me-auto p-3">
+            <h4>Danh sách câu hỏi</h4>
+            <form asp-action="TestStart" method="get">
+                <input type="hidden" name="subjectid" value="@Model.Subject01.SubjectId" />
+                <input type="hidden" name="total" value="@Model.TotalQuestion" />
+
+                <div class="form-group">
+                    <label for="questionSelector">Chọn câu hỏi:</label>
+                    <select id="questionSelector" name="selectedIndex" class="form-control" size="10" onchange="this.form.submit()">
+                        @for (int i = 0; i < Model.QuestionOptions.Count; i++)
+                        {
+                            var option = Model.QuestionOptions[i];
+                            <option value="@i" selected="@(Model.SelectedIndex == i)">
+                                @option.Text
+                            </option>
+                        }
+                    </select>
+
+                </div>
+
+            </form>
+        </div>
+        <div class="col-md-8 ms-auto p-3">
+            <div class="row">
+                <div class="col-4 p-2">
+                    <label>Họ tên: </label>
+                    <input class="form-control" asp-for="Account.FullName" />
+                </div>
+                <div class="col-4 p-2">
+                    <label>Môn thi: </label>
+                    <input class="form-control" asp-for="Subject01.SubjectName" />
+                </div>
+                <div class="col-4 p-2">
+                    <label>Số câu hỏi: </label>
+                    <input class="form-control" asp-for="TotalQuestion" />
+                </div>
+            </div>
+            <div class="row">
+                <h4>Nội dung câu hỏi và đáp án</h4>
+                <div id="questionArea">
+                    @if (Model.Question != null)
+                    {
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Câu hỏi: @Model.Question.QContent</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <input type="radio" name="answer_@Model.Question.QuestionId" value="A" id="option_A_@Model.Question.QuestionId" />
+                                        <label for="option_A_@Model.Question.QuestionId">A. @Model.Question.OptionA</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input type="radio" name="answer_@Model.Question.QuestionId" value="B" id="option_B_@Model.Question.QuestionId" />
+                                        <label for="option_B_@Model.Question.QuestionId">B. @Model.Question.OptionB</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input type="radio" name="answer_@Model.Question.QuestionId" value="C" id="option_C_@Model.Question.QuestionId" />
+                                        <label for="option_C_@Model.Question.QuestionId">C. @Model.Question.OptionC</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input type="radio" name="answer_@Model.Question.QuestionId" value="D" id="option_D_@Model.Question.QuestionId" />
+                                        <label for="option_D_@Model.Question.QuestionId">D. @Model.Question.OptionD</label>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                    <p>Vui lòng chọn một câu hỏi để xem chi tiết.</p>
+                    }
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId, total = Model.TotalQuestion, selectedIndex = 0 })" class="btn btn-primary">Câu đầu</a>
+                </div>
+                <div class="col-md-3">
+                    @{
+                        var prev = Model.SelectedIndex - 1;
+                        if (prev < 0) prev = 0;
+                    }
+                    <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId
+                    , total = Model.TotalQuestion, selectedIndex = prev })" class="btn btn-info">Trước</a>
+                </div>
+                <div class="col-md-3">
+                    @{
+                        var next = Model.SelectedIndex + 1;
+                        if (prev < 0) prev = 0;
+                    }
+                    <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId
+                    , total = Model.TotalQuestion, selectedIndex = next })" class="btn btn-info">Sau</a>
+                </div>
+                <div class="col-md-3">
+                    @{
+                        var last = Model.QuestionOptions.Count - 1;
+                    }
+                    <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId, total = Model.TotalQuestion, selectedIndex = last })" class="btn btn-success">Câu cuối</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

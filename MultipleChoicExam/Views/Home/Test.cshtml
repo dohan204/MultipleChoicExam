@@ -1,0 +1,30 @@
+﻿@model MultipleChoicExam.Models.HomeTest
+
+<div class="container mt-4">
+    <h3>Làm bài thi</h3>
+    <div class="card shadow">
+        <div class="card-body">
+            <form asp-action="Test" asp-controller="Home" method="post">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label asp-for="Subject01.SubjectId">Môn thi</label>
+                        @Html.DropDownListFor(s => s.Subject01.SubjectId,
+                                                (IEnumerable<SelectListItem>)ViewBag.Subject,
+                                                "Chọn môn", new {@class="form-control"})
+                    </div>
+                    <div class="col-md-10">
+                        <label>Số câu hỏi</label>
+                        @Html.DropDownListFor(
+                                  q => q.TotalQuestion,
+                                 (IEnumerable<SelectListItem>)ViewBag.Total,
+                                 "-- Chọn số lượng câu hỏi --",
+                                 new { @class = "form-control" }
+                                 )
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Gửi</button>
+            </form>
+            
+        </div>
+    </div>
+</div>
