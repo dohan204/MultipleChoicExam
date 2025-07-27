@@ -5,10 +5,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<EFCoreDbContext>(options =>
     options.UseSqlServer(@"Server=FC-HAN\SQLEXPRESS;Database=TestProjectDB;Trusted_Connection=True;TrustServerCertificate=True;"));
 builder.Services.AddAuthentication("MyCookieAuth")
     .AddCookie("MyCookieAuth");
+builder.Services.AddSession();
+builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    hostingContext.HostingEnvironment.EnvironmentName = "Development";
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,7 +28,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
