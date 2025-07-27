@@ -1,0 +1,23 @@
+﻿<div class="container mt-5">
+    <h2>Kết quả bài thi</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Họ tên</th>
+            <td>@ViewBag.FullName</td>
+        </tr>
+        <tr>
+            <th>Số câu hỏi</th>
+            <td>@ViewBag.Total</td>
+        </tr>
+        <tr>
+            <th>Số câu đúng</th>
+            <td>@ViewBag.Score</td>
+        </tr>
+        <tr>
+            <th>Điểm</th>
+            <td>@ViewBag.Mark</td>
+        </tr>
+    </table>
+
+    <a href="/Home/TestStart" class="btn btn-info">Xem lịch sử bài thi</a>
+</div>

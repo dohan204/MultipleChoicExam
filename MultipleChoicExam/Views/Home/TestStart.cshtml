@@ -1,6 +1,15 @@
 ﻿@model MultipleChoicExam.Models.HomeTest
 
-<div class="container mt-4" onchange="this.form.submit">
+<!-- Reset thời gian khi bắt đầu bài thi -->
+@if (ViewBag.ResetTimer != null)
+{
+    <script>
+        localStorage.removeItem("exam_end_time");
+    </script>
+}
+
+
+<div class="container mt-4" >
 
     <div class="row">
         <div class="col-md-4 me-auto p-3">
@@ -26,18 +35,24 @@
             </form>
         </div>
         <div class="col-md-8 ms-auto p-3">
+           
             <div class="row">
-                <div class="col-4 p-2">
+                <div class="col-md-3 p-2">
                     <label>Họ tên: </label>
                     <input class="form-control" asp-for="Account.FullName" />
                 </div>
-                <div class="col-4 p-2">
+                <div class="col-md-3 p-2">
                     <label>Môn thi: </label>
                     <input class="form-control" asp-for="Subject01.SubjectName" />
                 </div>
-                <div class="col-4 p-2">
+                <div class="col-md-3 p-2">
                     <label>Số câu hỏi: </label>
                     <input class="form-control" asp-for="TotalQuestion" />
+                </div>
+                <div class="col-md-3">
+                    <label>Thời Gian làm bài: </label>
+                    <br />
+                    <h4 id ="timer" style="font-size: 20px; font-weight: bold; color: red;"></h4>
                 </div>
             </div>
             <div class="row">
@@ -52,29 +67,36 @@
                             <div class="card-body">
                                 <ul class="list-group">
                                     <li class="list-group-item">
-                                        <input type="radio" name="answer_@Model.Question.QuestionId" value="A" id="option_A_@Model.Question.QuestionId" />
+                                        <input type="radio" name="question_@Model.Question.QuestionId" value="A"
+                                               id="option_A_@Model.Question.QuestionId"
+                                               onchange="saveAnswer('@Model.Question.QuestionId', 'A')" />
                                         <label for="option_A_@Model.Question.QuestionId">A. @Model.Question.OptionA</label>
                                     </li>
                                     <li class="list-group-item">
-                                        <input type="radio" name="answer_@Model.Question.QuestionId" value="B" id="option_B_@Model.Question.QuestionId" />
+                                        <input type="radio" name="question_@Model.Question.QuestionId" value="B"
+                                               id="option_B_@Model.Question.QuestionId"
+                                               onchange="saveAnswer('@Model.Question.QuestionId', 'B')" />
                                         <label for="option_B_@Model.Question.QuestionId">B. @Model.Question.OptionB</label>
                                     </li>
                                     <li class="list-group-item">
-                                        <input type="radio" name="answer_@Model.Question.QuestionId" value="C" id="option_C_@Model.Question.QuestionId" />
+                                        <input type="radio" name="question_@Model.Question.QuestionId" value="C"
+                                               id="option_C_@Model.Question.QuestionId"
+                                               onchange="saveAnswer('@Model.Question.QuestionId', 'C')" />
                                         <label for="option_C_@Model.Question.QuestionId">C. @Model.Question.OptionC</label>
                                     </li>
                                     <li class="list-group-item">
-                                        <input type="radio" name="answer_@Model.Question.QuestionId" value="D" id="option_D_@Model.Question.QuestionId" />
+                                        <input type="radio" name="question_@Model.Question.QuestionId" value="D"
+                                               id="option_D_@Model.Question.QuestionId"
+                                               onchange="saveAnswer('@Model.Question.QuestionId', 'D')" />
                                         <label for="option_D_@Model.Question.QuestionId">D. @Model.Question.OptionD</label>
                                     </li>
                                 </ul>
-
                             </div>
                         </div>
                     }
                     else
                     {
-                    <p>Vui lòng chọn một câu hỏi để xem chi tiết.</p>
+                        <p>Vui lòng chọn một câu hỏi để xem chi tiết.</p>
                     }
                 </div>
             </div>
@@ -93,7 +115,6 @@
                 <div class="col-md-3">
                     @{
                         var next = Model.SelectedIndex + 1;
-                        if (prev < 0) prev = 0;
                     }
                     <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId
                     , total = Model.TotalQuestion, selectedIndex = next })" class="btn btn-info">Sau</a>
@@ -104,8 +125,95 @@
                     }
                     <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId, total = Model.TotalQuestion, selectedIndex = last })" class="btn btn-success">Câu cuối</a>
                 </div>
+                
+                <form id="submitForm" method="post" asp-controller="Home" asp-action="SubmitAnswers" onsubmit="return prepareSubmission()">
+                    <input type="hidden" name="userId" value="@Model.Account.UserId" />
+                    <input type="hidden" name="subjectId" value="@Model.Subject01.SubjectId" />
+                    <input type="hidden" name="totalQuestion" value="@Model.TotalQuestion" />
+                    <input type="hidden" name="answersJson" id="answersJson" />
+                    <button type="submit" class="btn btn-success">Nộp bài</button>
+                </form>
             </div>
 
         </div>
     </div>
 </div>
+
+<script>
+
+    const totalTime = @Model.TestTime;
+    // Lưu thời gian làm bài vào localStorage
+    const endTimeKey = "exam_end_time";
+
+    // neesu chua co thoi gian ket thuc 
+    if(localStorage.getItem(endTimeKey) === null) {
+        const endTime = new Date().getTime() + totalTime * 1000; // Thời gian kết thúc
+        localStorage.setItem(endTimeKey, endTime);
+    }
+
+    function updateTimer(){
+        const endTime = parseInt(localStorage.getItem(endTimeKey));
+        const now = new Date().getTime();
+        const remaining  = Math.floor((endTime - now)/1000); // Thời gian còn lại
+        const timerEl = document.getElementById("timer");
+
+        if(remaining  <= 0){
+            clearInterval(timerInterval);
+            timerEl.textContent = "00:00";
+            localStorage.removeItem(endTimeKey);
+            alert("Hết giờ làm bài!");
+                prepareSubmission();
+    document.getElementById("submitForm").submit();
+
+        }else{
+             const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
+            const seconds = (remaining % 60).toString().padStart(2, '0');
+            timerEl.textContent = `${minutes}:${seconds}`;
+        }
+    }
+    const timerInterval = setInterval(updateTimer, 1000); // Cập nhật mỗi giây
+    updateTimer(); // Cập nhật ngay lập tức khi trang được tải
+
+     function saveAnswer(questionId, selectedOption) {
+        let answers = JSON.parse(localStorage.getItem("user_answers") || "{}");
+
+        // Kiểm tra nếu answers không phải là object thì reset lại
+        if (typeof answers !== "object" || Array.isArray(answers)) {
+            answers = {};
+        }
+
+        answers[questionId] = selectedOption;
+        localStorage.setItem("user_answers", JSON.stringify(answers));
+    }
+    function restoreAnswers(){
+        const answers = JSON.parse(localStorage.getItem("user_answers") || "{}")
+        for(let questionId in answers){
+            const selectedAnswer = answers[questionId];
+            const radioId = `option_${selectedAnswer}_${questionId}`;
+            const radio = document.getElementById(radioId);
+            if (radio) radio.checked = true;
+        }
+    }
+    window.onload = function () {
+        restoreAnswers();
+    };
+
+    function prepareSubmission() {
+        const answers = JSON.parse(localStorage.getItem("user_answers") || "{}");
+
+            if (Object.keys(answers).length < @Model.TotalQuestion) {
+        alert("Bạn chưa trả lời hết tất cả câu hỏi!");
+        return false;
+    }
+        const confimeSubmit = confirm("Bạn có chắc muốn nộp bài không?")
+        if(!confimeSubmit) return false
+        console.log("Đáp án gửi lên:", answers);
+        // Gắn vào input hidden
+       document.getElementById("answersJson").value = JSON.stringify(answers);
+        // localStorage.removeItem("user_answers");
+        localStorage.removeItem("exam_end_time");
+        // Cho phép submit tiếp tục
+        return true;
+    }
+</script>
+

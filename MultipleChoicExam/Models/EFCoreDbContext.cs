@@ -9,5 +9,6 @@ namespace MultipleChoicExam.Models
         public DbSet<Subject01> Subject01 { get; set; }
         public DbSet<Question> Question { get; set; }
         public DbSet<Role> Role { get; set; }
+        public DbSet<TestHistory> TestHistory { get; set; }
     }
 }
