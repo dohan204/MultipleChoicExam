@@ -1,21 +1,26 @@
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MultipleChoicExam.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddIdentity<UserAccount, IdentityRole>()
+    .AddEntityFrameworkStores<EFCoreDbContext>() // thêm DbContext vào đây
+    .AddDefaultTokenProviders();
 builder.Services.AddDbContext<EFCoreDbContext>(options =>
     options.UseSqlServer(@"Server=FC-HAN\SQLEXPRESS;Database=TestProjectDB;Trusted_Connection=True;TrustServerCertificate=True;"));
-builder.Services.AddAuthentication("MyCookieAuth")
-    .AddCookie("MyCookieAuth");
 builder.Services.AddSession();
-builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
-{
-    hostingContext.HostingEnvironment.EnvironmentName = "Development";
-});
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Home/NoPermission";
+    });
 
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,8 +35,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

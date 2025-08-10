@@ -1,0 +1,24 @@
+﻿
+<div class="container">
+    <div class="nav navbar-expand-md bg-gradient text-black justify-content-md-center">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class = "nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hệ thống</a>
+                <ul class="dropdown dropdown-menu">
+                    <li><a asp-controller="Home" asp-action="InfoUser" class="dropdown-item">Thông tin tài khoản</a></li>
+                    <li><a asp-controller="Home" asp-action="ChangePassword" class="dropdown-item">Đổi mật khẩu</a></li>
+                    <li><a asp-controller="Home" asp-action="Login" class="dropdown-item">Đăng xuất</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Home" asp-action="Test" class="nav-link">Làm bài thi</a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Home" asp-action="Han" class="nav-link">Trợ giúp</a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Home" asp-action="ReportMark" class="nav-link">Bảng xếp hạng điểm thi theo môn </a>
+            </li>
+        </ul>
+    </div>
+</div>

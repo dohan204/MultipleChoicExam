@@ -14,6 +14,6 @@
             public string OptionC { get; set; }
             public string OptionD { get; set; }
             public string Answer { get; set; }
-            //public DateTime? CreateAt { get; set; }
+              
         }
     }

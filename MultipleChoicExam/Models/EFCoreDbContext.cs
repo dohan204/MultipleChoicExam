@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 namespace MultipleChoicExam.Models
 {
-    public class EFCoreDbContext : DbContext
+    public class EFCoreDbContext : IdentityDbContext<UserAccount>
     {
         public EFCoreDbContext(DbContextOptions<EFCoreDbContext> options) : base(options) { }
         public DbSet<UserAccount> UserAccount { get; set; }

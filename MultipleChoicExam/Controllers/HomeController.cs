@@ -12,22 +12,32 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Build.Framework;
+using Microsoft.AspNetCore.Identity;
 
 namespace MultipleChoicExam.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserManager<UserAccount> _userManager;
+        private readonly SignInManager<UserAccount> _signInManager;
         private readonly EFCoreDbContext _dbContext;
         private int _selectedIndex = 0;
-        public HomeController(EFCoreDbContext dbContext)
+        public HomeController(EFCoreDbContext dbContext, SignInManager<UserAccount> signInManager, UserManager<UserAccount> userManager)
         {
             _dbContext = dbContext;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
+
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult Main()
+        [AllowAnonymous]
+        public IActionResult NoPermission()
         {
             return View();
         }
@@ -40,30 +50,84 @@ namespace MultipleChoicExam.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserAccount user)
         {
-            var userExits = _dbContext.UserAccount
-                .FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
-
-            if (userExits != null)
+            try
             {
-                // Tạo claims
-                var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, userExits.UserName)
-        };
+                var userExits = _dbContext.UserAccount
+                .FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
+                if (userExits == null)
+                {
+                    ViewBag.Error = "Sai tai khoan hoac mat khau!";
+                    return View(user);
+                }
+                var fullName = userExits.FullName ?? "Không có tên";
+                var birthday = userExits.Birthday?.ToString("dd/MM/yyyy") ?? "Không có ngày sinh";
 
-                var identity = new ClaimsIdentity(claims, "MyCookieAuth");
-                var principal = new ClaimsPrincipal(identity);
+                if (userExits != null)
+                {
+                    // Tạo claims
+                    var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, userExits.UserName),
+                    new Claim(ClaimTypes.Role.ToLower(), userExits.RoleId ?? "user")
+                };
 
-                // Đăng nhập
-                await HttpContext.SignInAsync("MyCookieAuth", principal);
+                    var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+                    var principal = new ClaimsPrincipal(identity);
 
-                return RedirectToAction("Main", "Home");
+                    // Đăng nhập
+                    await HttpContext.SignInAsync("MyCookieAuth", principal);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                return View(user);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View(user);
+            };
 
-            ModelState.AddModelError("", "Sai tài khoản hoặc mật khẩu");
-            return View(user);
+            // Truy cập FullName, Birthday... phải check null
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task< IActionResult> Register(UserAccount model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = new UserAccount { 
+                        UserName = model.UserName,
+                        Password = model.Password,
+                        Email = model.Email,
+                    };
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    // tạo thành công thì xứ lý đăng nhập
+                    if (result.Succeeded)
+                    {
+                        // đăng nhập tại đây 
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    // hiển thị ra các lỗi 
+                    foreach(var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
 
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Lỗi: {ex.Message}");
+            }
+            return View(model);
+        }
         [HttpGet]
         public IActionResult ChangePassword()
         {
@@ -300,9 +364,9 @@ namespace MultipleChoicExam.Controllers
             {
                 Value = que.QuestionId.ToString(),
                 Text = $"Câu {index + 1}: {que.QContent}"
-            }).ToList(); // Không cần Take(total) nữa
+            }).ToList(); 
 
-            // --- 2. Lấy thông tin người dùng ---
+            // --- 2. GEt info user ---
             var loginName = User.Identity?.Name;
             if (string.IsNullOrEmpty(loginName))
             {
@@ -312,7 +376,7 @@ namespace MultipleChoicExam.Controllers
             var user = _dbContext.UserAccount.FirstOrDefault(u => u.UserName == loginName);
             var fullName = user?.FullName ?? loginName;
 
-            // --- 3. Lấy thông tin môn học ---
+            // --- 3. get info subject ---
             var subjectName = _dbContext.Subject01
                                         .Where(x => x.SubjectId == subjectid)
                                         .Select(x => x.SubjectName)
@@ -340,8 +404,6 @@ namespace MultipleChoicExam.Controllers
             if (selectedIndex >= questionOptions.Count) selectedIndex = questionOptions.Count - 1;
             // Lấy câu hỏi tương ứng với selectedIndex
             selectedQuestion = randomQues.ElementAtOrDefault(selectedIndex.Value);
-            // giới hạn thời gian thi 
-            //int time =  await CounDownTime(total);
 
             if (string.IsNullOrEmpty(questionIdsFromSession))
             {
@@ -392,14 +454,28 @@ namespace MultipleChoicExam.Controllers
                 foreach (var entry in userAnswers)
                 {
                     int questionId = int.Parse(entry.Key);
-                    string selectedOption = entry.Value;
-                    var question = _dbContext.Question.FirstOrDefault(q => q.QuestionId == questionId);
-                    Console.WriteLine($"Câu {questionId}: chọn {selectedOption}, đúng là {question?.Answer}");
+                    string selectedOption = entry.Value.ToUpper().Trim(); // Đáp án người chọn
 
-                    if (question != null && question.Answer.Trim().ToUpper() == selectedOption.Trim().ToUpper())
+                    var question = _dbContext.Question.FirstOrDefault(q => q.QuestionId == questionId);
+
+                    if (question == null)
+                        continue;
+
+                    var selectedText = selectedOption switch
+                    {
+                        "A" => question.OptionA,
+                        "B" => question.OptionB,
+                        "C" => question.OptionC,
+                        "D" => question.OptionD,
+                        _ => null
+                    };
+
+                    if (selectedText != null && selectedText.Trim().ToUpper() == question.Answer.Trim().ToUpper())
                     {
                         score++;
                     }
+
+                    
                 }
 
                 int mark = (int)Math.Round((double)score / totalQuestion * 10);
@@ -416,7 +492,7 @@ namespace MultipleChoicExam.Controllers
 
                 var history = new TestHistory
                 {
-                    UserId = user.UserId, // ✅ đúng kiểu int
+                    UserId = user.UserId, 
                     SubjectId = subjectId,
                     testDate = DateTime.Now,
                     TotalQuestion = totalQuestion,
@@ -520,5 +596,34 @@ namespace MultipleChoicExam.Controllers
                 return View("Error");
             }
         }
+
+
+        // hiển thì báo cáo kết quả thi theo điểm 
+        [HttpGet, ActionName("ReportMark")]
+        [Route("Home/ReportMark")]
+        public async Task<IActionResult> ReportMark(string? subjectID)
+        {
+            // get list subject to display
+            var subjects = await _dbContext.Subject01.ToListAsync();
+
+            List<TestHistory> markList = new List<TestHistory>();
+
+            if (!string.IsNullOrEmpty(subjectID))
+            {
+                markList = await _dbContext.TestHistory
+                .Where(th => th.SubjectId == subjectID)
+                .Include(th => th.UserAccount) // để lấy tên
+                .OrderByDescending(th => th.Mark)
+                .ToListAsync();
+
+            }
+
+            ViewBag.Subjects = subjects;
+            ViewBag.SelectedSubjectId = subjectID;
+
+            return View(markList); // model là List<TestHistory>
+        }
+
+
     }
 }

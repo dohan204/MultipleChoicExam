@@ -1,0 +1,51 @@
+﻿@model List<MultipleChoicExam.Models.TestHistory>
+@{
+    var subjects = ViewBag.Subjects as List<MultipleChoicExam.Models.Subject01>;
+    var selectedSubjectId = ViewBag.SelectedSubjectId as string;
+}
+
+<h2>Báo cáo điểm theo môn</h2>
+<a asp-controller="Home" asp-action="Index">Back</a>
+<form method="get" asp-action="ReportMark">
+    <div class="mb-3">
+        <label for="subjectID" class="form-label">Chọn môn thi:</label>
+        <select name="subjectID" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Chọn môn --</option>
+            @foreach (var subject in subjects)
+            {
+                <option value="@subject.SubjectId" selected="@(subject.SubjectId == selectedSubjectId)">
+                    @subject.SubjectName
+                </option>
+            }
+        </select>
+    </div>
+</form>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Họ tên</th>
+                <th>Điểm</th>
+                <th>Số câu đúng</th>
+                <th>Ngày thi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.UserAccount.FullName</td>
+                    <td>@item.Mark</td>
+                    <td>@item.CorrectAnswer/@item.TotalQuestion</td>
+                    <td>@item.testDate.ToString("dd/MM/yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (!string.IsNullOrEmpty(selectedSubjectId))
+{
+    <div class="alert alert-info">Không có dữ liệu bài thi cho môn này.</div>
+}

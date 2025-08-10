@@ -5,8 +5,12 @@
 {
     <script>
         localStorage.removeItem("exam_end_time");
+        localStorage.removeItem("user_answers");
     </script>
 }
+<script>
+
+</script>
 
 
 <div class="container mt-4" >
@@ -33,21 +37,22 @@
                 </div>
 
             </form>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-info">Back to Main</a>
         </div>
         <div class="col-md-8 ms-auto p-3">
            
             <div class="row">
                 <div class="col-md-3 p-2">
                     <label>Họ tên: </label>
-                    <input class="form-control" asp-for="Account.FullName" />
+                    <input class="form-control" asp-for="Account.FullName" readonly/>
                 </div>
                 <div class="col-md-3 p-2">
                     <label>Môn thi: </label>
-                    <input class="form-control" asp-for="Subject01.SubjectName" />
+                    <input class="form-control" asp-for="Subject01.SubjectName" readonly />
                 </div>
                 <div class="col-md-3 p-2">
                     <label>Số câu hỏi: </label>
-                    <input class="form-control" asp-for="TotalQuestion" />
+                    <input class="form-control" asp-for="TotalQuestion" readonly/>
                 </div>
                 <div class="col-md-3">
                     <label>Thời Gian làm bài: </label>
@@ -100,39 +105,41 @@
                     }
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-md-3">
-                    <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId, total = Model.TotalQuestion, selectedIndex = 0 })" class="btn btn-primary">Câu đầu</a>
+            <div class="row mt-4 text-center">
+                <div class="col">
+                    <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId, total = Model.TotalQuestion, selectedIndex = 0 })" class="btn btn-info">Câu đầu</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col">
                     @{
                         var prev = Model.SelectedIndex - 1;
                         if (prev < 0) prev = 0;
                     }
                     <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId
-                    , total = Model.TotalQuestion, selectedIndex = prev })" class="btn btn-info">Trước</a>
+                    , total = Model.TotalQuestion, selectedIndex = prev })" class="btn btn-info"><<-Trước</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col">
                     @{
                         var next = Model.SelectedIndex + 1;
                     }
                     <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId
-                    , total = Model.TotalQuestion, selectedIndex = next })" class="btn btn-info">Sau</a>
+                    , total = Model.TotalQuestion, selectedIndex = next })" class="btn btn-info">Sau->></a>
                 </div>
-                <div class="col-md-3">
+                <div class="col">
                     @{
                         var last = Model.QuestionOptions.Count - 1;
                     }
-                    <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId, total = Model.TotalQuestion, selectedIndex = last })" class="btn btn-success">Câu cuối</a>
+                    <a href="@Url.Action("TestStart", new { subjectid = Model.Subject01.SubjectId, total = Model.TotalQuestion, selectedIndex = last })" class="btn btn-info">Câu cuối</a>
                 </div>
                 
-                <form id="submitForm" method="post" asp-controller="Home" asp-action="SubmitAnswers" onsubmit="return prepareSubmission()">
-                    <input type="hidden" name="userId" value="@Model.Account.UserId" />
-                    <input type="hidden" name="subjectId" value="@Model.Subject01.SubjectId" />
-                    <input type="hidden" name="totalQuestion" value="@Model.TotalQuestion" />
-                    <input type="hidden" name="answersJson" id="answersJson" />
-                    <button type="submit" class="btn btn-success">Nộp bài</button>
-                </form>
+               <div class="col">
+                    <form id="submitForm" method="post" asp-controller="Home" asp-action="SubmitAnswers" onsubmit="return prepareSubmission()">
+                        <input type="hidden" name="userId" value="@Model.Account.UserId" />
+                        <input type="hidden" name="subjectId" value="@Model.Subject01.SubjectId" />
+                        <input type="hidden" name="totalQuestion" value="@Model.TotalQuestion" />
+                        <input type="hidden" name="answersJson" id="answersJson" />
+                        <button type="submit" class="btn btn-success">Nộp bài</button>
+                    </form>
+               </div>
             </div>
 
         </div>
@@ -203,14 +210,13 @@
 
             if (Object.keys(answers).length < @Model.TotalQuestion) {
         alert("Bạn chưa trả lời hết tất cả câu hỏi!");
-        return false;
+        return false;   
     }
         const confimeSubmit = confirm("Bạn có chắc muốn nộp bài không?")
         if(!confimeSubmit) return false
         console.log("Đáp án gửi lên:", answers);
         // Gắn vào input hidden
        document.getElementById("answersJson").value = JSON.stringify(answers);
-        // localStorage.removeItem("user_answers");
         localStorage.removeItem("exam_end_time");
         // Cho phép submit tiếp tục
         return true;

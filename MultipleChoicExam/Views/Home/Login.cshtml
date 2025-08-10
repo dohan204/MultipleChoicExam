@@ -1,9 +1,32 @@
 ﻿@model MultipleChoicExam.Models.UserAccount
+@if (TempData["Success"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: '@TempData["Success"]',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    </script>
+}
 
 <div class="container mt-5" style="max-width: 400px;">
     <h2 class="text-center">Login Services</h2>
     <form asp-action="Login" asp-controller="Home" class="mt-4">
         <div class="card shadow mt-0">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger" id="error-alert">
+                    <span>@ViewBag.Error</span>
+                </div>
+                <script>
+                    setTimeout(function () {
+                        document.getElementById("error-alert").style.display = "none";
+                    }, 3000); // 3 giây sau ẩn đi
+                </script>
+            }
             <div class="card-body">
                 <div class="col-md-12">
                     <div class="mb-3 mt-3">
@@ -19,7 +42,9 @@
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-success">Đăng nhập</button>
                     </div>
-                    <p>bạn có tài khoản chưa?<a asp-controller="Home" asp-action="Register">rigitTer</a></p>
+                    <p>
+                        Do you have an account? If not then..-><a asp-controller="Home" asp-action="Register">RegisTer</a>
+                    </p>
 
                 </div>
             </div>

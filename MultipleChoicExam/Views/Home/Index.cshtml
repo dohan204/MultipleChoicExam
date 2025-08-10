@@ -1,1 +1,122 @@
-﻿
+﻿<!-- Navbar -->
+<div class="container-md">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="~/Images/meoHieu.jpg" alt="Avatar Logo" style="width:40px;" class="rounded-pill">
+            </a>
+            <a class="navbar-brand" href="#">Trang chủ</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+
+                    <!-- Hệ thống -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hệ thống</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
+                            <li>@Html.ActionLink("Đổi mật khẩu", "ChangePassword", "Home", null, new { @class = "dropdown-item" })</li>
+                            <li><a class="dropdown-item" href="#">Sao lưu dữ liệu</a></li>
+                            <li><a class="dropdown-item" href="#">Phục hồi dữ liệu</a></li>
+                            <li><a asp-controller="Home" asp-action="ManageUser" class="dropdown-item">Quản lý người dùng</a></li>
+                            <li>@Html.ActionLink("Đăng xuất", "Login", "Home", null, new { @class = "dropdown-item" })</li>
+                        </ul>
+                    </li>
+
+                    <!-- Danh mục -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Danh mục</a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="ManageUser" asp-action="ManageSubject" class="dropdown-item">Quản lý môn thi</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lý đề thi</a></li>
+                            <li><a asp-controller="Question" asp-action="ShowDataQuestion" class="dropdown-item">Quản lý câu hỏi</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Chức năng -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Chức năng</a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Home" asp-action="Test" class="dropdown-item">Làm bài thi</a></li>
+                            <li><a class="dropdown-item" href="#">Chọn đề thi</a></li>
+                            <li><a class="dropdown-item" href="#">Chọn môn thi</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Thống kê -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thống kê - báo cáo</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-controller="Home" asp-action="ReportMark">Báo cáo điểm theo môn thi</a></li>
+                            <li><a class="dropdown-item" href="#">Báo cáo điểm theo thời gian</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Trợ giúp -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Trợ giúp</a>
+                    </li>
+                </ul>
+
+                <!-- Form tìm kiếm -->
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm">
+                    <button class="btn btn-outline-light" type="submit">Tìm</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Nội dung chính -->
+<div class="container mt-5">
+    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="@Url.Content("~/Images/anhmeohieuhh.jpg")"  class="d-block w-100 img-fluid" style="max-height: 400px; object-fit: cover"/>
+            </div>
+            <div class="carousel-item">
+                <img src="@Url.Content("~/Images/anhMeomeo.jpg")" class="d-block w-100 img-fluid" style="max-height: 400px; object-fit: cover;" />
+            </div>
+            <div class="carousel-item">
+                <img src="@Url.Content("~/Images/meoHieu.jpg")" class="d-block w-100 img-fluid" style="max-height: 400px; object-fit: cover"/>
+            </div>
+        </div>
+
+        <!-- Nút điều hướng -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+
+        <!-- Chấm tròn điều hướng -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2"></button>
+        </div>
+    </div>
+    <div class="text-md-center text-body mt-5">
+        <p>Mình mua cái này về và chưa dùng lần nào. Mỗi lần nhìn vào nó lại thấy vui vui. Hình như nó không làm được gì, nhưng nó cũng không làm mình thất vọng.</p>
+    </div>
+    <div class="container-md mt-3">
+        <div class="row">
+            @for(int i = 1; i<= 3; i++)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="">
+                        <img src="~/Images/anhmeohieuhh.jpg" />
+                        <div>
+                            <h5>Thông tin meo</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
